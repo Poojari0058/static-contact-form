@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact Us</title>
+</head>
+<body>
+  <h1>Contact Us</h1>
+  <form id="contact-form">
+    <label>Name:</label><br />
+    <input type="text" name="name" required /><br /><br />
+
+    <label>Email:</label><br />
+    <input type="email" name="email" required /><br /><br />
+
+    <label>Message:</label><br />
+    <textarea name="message" required></textarea><br /><br />
+
+    <button type="submit">Send</button>
+  </form>
+
+  <div id="response"></div>
+
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const form = e.target;
+      const data = {
+        name: form.name.value,
+        email: form.email.value,
+        message: form.message.value,
+      };
+
+      const responseDiv = document.getElementById('response');
+      responseDiv.textContent = 'Sending...';
+
+      try {
+        const res = await fetch('[YOUR_FUNCTION_URL]', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        const text = await res.text();
+        responseDiv.textContent = res.ok ? 'Message sent!' : `Error: ${text}`;
+      } catch (err) {
+        responseDiv.textContent = 'Error: ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
